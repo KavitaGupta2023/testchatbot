@@ -2,22 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dialogflow Chatbot</title>
-  <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+  <title>Dialogflow CX Chatbot</title>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
   <style>
     df-messenger {
       z-index: 999;
       position: fixed;
+      bottom: 0;
+      right: 0;
       --df-messenger-font-color: #000;
       --df-messenger-font-family: Google Sans;
       --df-messenger-chat-background: #f3f6fc;
       --df-messenger-message-user-background: #d3e3fd;
       --df-messenger-message-bot-background: #fff;
-      bottom: 0;
-      right: 0;
-      top: 0;
-      width: 350px;
     }
   </style>
 </head>
@@ -25,11 +22,9 @@
   <df-messenger
     project-id="testaichatbot-466813"
     agent-id="f0509c13-7c76-486d-bb4f-84f8ed02211e"
-    language-code="en"
-    max-query-length="-1"
-  >
-    <df-messenger-chat chat-title="FiNnacle BOT">
-    </df-messenger-chat>
+    location="asia-south1"
+    language-code="en">
+    <df-messenger-chat chat-title="FiNnacle BOT"></df-messenger-chat>
   </df-messenger>
 </body>
 </html>

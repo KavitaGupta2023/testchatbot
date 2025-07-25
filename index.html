@@ -22,7 +22,8 @@
     bottom: 16px;
     right: 16px;
   }
- <script>
+</style>
+<script>
     document.getElementById("clear-chat").addEventListener("click", function () {
       const iframe = document.querySelector("df-messenger").shadowRoot.querySelector("iframe");
       const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -33,5 +34,4 @@
       }
       
     });
-  </script>
-</style>
+</script>

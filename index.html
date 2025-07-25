@@ -1,75 +1,88 @@
-<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dialogflow CX with Clear Chat</title>
 
-<!-- Clear Chat Button -->
-<button id="clear-chat">Clear Chat</button>
+  <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
 
-<!-- Chatbot -->
-<df-messenger
-  project-id="testaichatbot-466813"
-  agent-id="f0509c13-7c76-486d-bb4f-84f8ed02211e"
-  language-code="en"
-  max-query-length="-1">
-  <df-messenger-chat-bubble chat-title="finchat">
-  </df-messenger-chat-bubble>
-</df-messenger>
-
-<style>
-  /* Chatbot styling */
-  df-messenger {
-    z-index: 999;
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    --df-messenger-font-color: #000;
-    --df-messenger-font-family: Google Sans;
-    --df-messenger-chat-background: #f3f6fc;
-    --df-messenger-message-user-background: #d3e3fd;
-    --df-messenger-message-bot-background: #fff;
-  }
-
-  /* Clear Chat button styling */
-  #clear-chat {
-    position: fixed;
-    bottom: 420px; /* adjust this based on chatbot height */
-    right: 32px;
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
-
-  /* Optional: Hide button on smaller screens */
-  @media (max-width: 480px) {
+  <style>
     #clear-chat {
-      display: none;
+      display: none; /* Hide by default */
+      position: fixed;
+      bottom: 80px;
+      right: 16px;
+      z-index: 1000;
+      padding: 8px 16px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
     }
-  }
-</style>
 
-<script>
-  document.getElementById("clear-chat").addEventListener("click", function () {
+    df-messenger {
+      z-index: 999;
+      position: fixed;
+      --df-messenger-font-color: #000;
+      --df-messenger-font-family: Google Sans;
+      --df-messenger-chat-background: #f3f6fc;
+      --df-messenger-message-user-background: #d3e3fd;
+      --df-messenger-message-bot-background: #fff;
+      bottom: 16px;
+      right: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="clear-chat">Clear Chat</button>
+
+  <df-messenger
+    project-id="testaichatbot-466813"
+    agent-id="f0509c13-7c76-486d-bb4f-84f8ed02211e"
+    language-code="en">
+    <df-messenger-chat-bubble chat-title="finchat"></df-messenger-chat-bubble>
+  </df-messenger>
+
+  <script>
+    const clearButton = document.getElementById("clear-chat");
     const dfMessenger = document.querySelector("df-messenger");
 
-    // Clear messages
-    try {
+    // Show button when chat UI is opened
+    dfMessenger.addEventListener("df-messenger-loaded", () => {
       const iframe = dfMessenger.shadowRoot.querySelector("iframe");
-      const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-      const messagePane = innerDoc.querySelector("df-chat-messages");
-      if (messagePane) {
-        messagePane.innerHTML = "";
-      }
-    } catch (e) {
-      console.warn("Unable to clear messages:", e);
-    }
+      iframe.addEventListener("load", () => {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        const openObserver = new MutationObserver(() => {
+          const chatOpen = doc.querySelector("df-chat-wrapper[opened]");
+          if (chatOpen) {
+            clearButton.style.display = "block"; // Show the button
+          }
+        });
+        openObserver.observe(doc.body, { childList: true, subtree: true });
+      });
+    });
 
-    // Reset session
-    const newSessionId = "session-" + Math.floor(Math.random() * 1000000);
-    dfMessenger.setAttribute("session-id", newSessionId);
-  });
-</script>
+    // Clear chat and reset session
+    clearButton.addEventListener("click", function () {
+      try {
+        const iframe = dfMessenger.shadowRoot.querySelector("iframe");
+        const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const messagePane = innerDoc.querySelector("df-chat-messages");
+        if (messagePane) {
+          messagePane.innerHTML = "";
+        }
+      } catch (e) {
+        console.warn("Could not clear messages:", e);
+      }
+
+      const newSessionId = "session-" + Math.random().toString(36).substring(2);
+      dfMessenger.setAttribute("session-id", newSessionId);
+    });
+  </script>
+
+</body>
+</html>

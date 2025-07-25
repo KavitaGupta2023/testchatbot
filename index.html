@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
 <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+<button id="clear-chat">Clear Chat</button>
 <df-messenger
   project-id="testaichatbot-466813"
   agent-id="f0509c13-7c76-486d-bb4f-84f8ed02211e"
@@ -21,4 +22,16 @@
     bottom: 16px;
     right: 16px;
   }
+ <script>
+    document.getElementById("clear-chat").addEventListener("click", function () {
+      const iframe = document.querySelector("df-messenger").shadowRoot.querySelector("iframe");
+      const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+      const messagePane = innerDoc.querySelector("df-chat-messages");
+
+      if (messagePane) {
+        messagePane.innerHTML = ""; // Remove all messages
+      }
+      
+    });
+  </script>
 </style>
